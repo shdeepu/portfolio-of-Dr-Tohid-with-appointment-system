@@ -490,92 +490,90 @@ function App() {
             </p>
           </motion.div>
 
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <Card>
               <CardContent className="p-8">
-                <form onSubmit={handleFormSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Full Name *
-                      </label>
-                      <Input
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        placeholder="Enter your full name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Phone Number *
-                      </label>
-                      <Input
-                        type="tel"
-                        required
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        placeholder="Enter your phone number"
-                      />
+                {/* Google Form Integration */}
+                <div className="text-center mb-6">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-6">
+                    <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
+                      📋 Google Form Integration Ready
+                    </h3>
+                    <p className="text-blue-600 dark:text-blue-300 text-sm">
+                      Replace the iframe src below with your actual Google Form embed URL
+                    </p>
+                  </div>
+                </div>
+
+                {/* Google Form Embed - Replace with actual Google Form URL */}
+                <div className="relative w-full" style={{ minHeight: '600px' }}>
+                  <iframe
+                    src="https://docs.google.com/forms/d/e/YOUR_GOOGLE_FORM_ID/viewform?embedded=true"
+                    width="100%"
+                    height="600"
+                    frameBorder="0"
+                    marginHeight="0"
+                    marginWidth="0"
+                    className="rounded-lg border border-gray-200 dark:border-gray-700"
+                    title="Dr. Tohid Appointment Booking Form"
+                  >
+                    Loading…
+                  </iframe>
+                  
+                  {/* Fallback content when Google Form is not available */}
+                  <div className="absolute inset-0 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                    <div className="text-center p-8">
+                      <Calendar className="w-16 h-16 text-primary mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                        Appointment Booking Form
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md">
+                        To complete the integration, please:
+                      </p>
+                      <div className="text-left bg-white dark:bg-gray-700 rounded-lg p-6 max-w-lg mx-auto">
+                        <ol className="list-decimal list-inside space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                          <li>Create a Google Form with the following fields:</li>
+                          <ul className="ml-6 mt-2 space-y-1 list-disc list-inside text-xs">
+                            <li>Full Name (Required)</li>
+                            <li>Phone Number (Required)</li>
+                            <li>Email Address (Required)</li>
+                            <li>Preferred Date (Required)</li>
+                            <li>Preferred Time (Required)</li>
+                            <li>Symptoms/Reason for Visit (Optional)</li>
+                          </ul>
+                          <li className="mt-3">Get the embed code from Google Forms</li>
+                          <li>Replace the iframe src URL above with your form's embed URL</li>
+                          <li>Remove this placeholder content</li>
+                        </ol>
+                      </div>
+                      <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                        <Button 
+                          onClick={() => window.open('https://forms.google.com', '_blank')}
+                          className="bg-blue-600 hover:bg-blue-700"
+                        >
+                          Create Google Form
+                        </Button>
+                        <Button 
+                          variant="outline"
+                          onClick={() => window.open('mailto:dr.tohid@clinic.com?subject=Appointment Request', '_blank')}
+                        >
+                          Email Instead
+                        </Button>
+                      </div>
                     </div>
                   </div>
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Email Address *
-                    </label>
-                    <Input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      placeholder="Enter your email address"
-                    />
+                {/* Instructions for form integration */}
+                <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Integration Instructions:</h4>
+                  <div className="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                    <p><strong>Step 1:</strong> Create your Google Form at <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">forms.google.com</a></p>
+                    <p><strong>Step 2:</strong> Click "Send" → "Embed HTML" → Copy the iframe code</p>
+                    <p><strong>Step 3:</strong> Replace the iframe src URL in the code above</p>
+                    <p><strong>Step 4:</strong> Remove the placeholder content for a clean integration</p>
                   </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Preferred Date *
-                      </label>
-                      <Input
-                        type="date"
-                        required
-                        value={formData.date}
-                        onChange={(e) => setFormData({...formData, date: e.target.value})}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Preferred Time *
-                      </label>
-                      <Input
-                        type="time"
-                        required
-                        value={formData.time}
-                        onChange={(e) => setFormData({...formData, time: e.target.value})}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Symptoms / Reason for Visit
-                    </label>
-                    <Textarea
-                      value={formData.symptoms}
-                      onChange={(e) => setFormData({...formData, symptoms: e.target.value})}
-                      placeholder="Please describe your symptoms or reason for the visit"
-                      rows={4}
-                    />
-                  </div>
-
-                  <Button type="submit" size="lg" className="w-full">
-                    <Calendar className="w-5 h-5 mr-2" />
-                    Submit Appointment Request
-                  </Button>
-                </form>
+                </div>
               </CardContent>
             </Card>
           </div>
