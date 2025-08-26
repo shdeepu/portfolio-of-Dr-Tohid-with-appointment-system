@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
-import { Input } from '@/components/ui/input.jsx'
-import { Textarea } from '@/components/ui/textarea.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
-import { 
-  Calendar, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Award, 
-  Heart, 
-  Shield, 
+import {
+  Calendar,
+  Phone,
+  Mail,
+  MapPin,
+  Award,
+  Heart,
+  Shield,
   Stethoscope,
   Clock,
   Users,
@@ -22,7 +20,10 @@ import {
   Moon,
   Sun,
   Menu,
-  X
+  X,
+  Syringe,
+  Pill,
+  Microscope
 } from 'lucide-react'
 import doctorImage from './assets/doctor_hero_image.png'
 import './App.css'
@@ -31,30 +32,25 @@ function App() {
   const [darkMode, setDarkMode] = useState(false)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    date: '',
-    time: '',
-    symptoms: ''
-  })
 
   const testimonials = [
     {
       name: "Sarah Ahmed",
       text: "Dr. Tohid's compassionate care and expertise helped me through a difficult diagnosis. His thorough approach and clear communication made all the difference.",
-      rating: 5
+      rating: 5,
+      image: "https://via.placeholder.com/50/0000FF/FFFFFF?text=SA" // Placeholder image
     },
     {
       name: "Mohammad Rahman",
       text: "Excellent doctor with great bedside manner. He takes time to listen and explains everything clearly. Highly recommend!",
-      rating: 5
+      rating: 5,
+      image: "https://via.placeholder.com/50/FF0000/FFFFFF?text=MR" // Placeholder image
     },
     {
       name: "Fatima Khan",
       text: "Professional, knowledgeable, and caring. Dr. Tohid provided exceptional treatment for my chronic condition.",
-      rating: 5
+      rating: 5,
+      image: "https://via.placeholder.com/50/00FF00/FFFFFF?text=FK" // Placeholder image
     }
   ]
 
@@ -112,19 +108,6 @@ function App() {
     }
   }, [darkMode])
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault()
-    alert('Appointment request submitted! We will contact you soon.')
-    setFormData({
-      name: '',
-      phone: '',
-      email: '',
-      date: '',
-      time: '',
-      symptoms: ''
-    })
-  }
-
   const scrollToSection = (sectionId) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
     setMobileMenuOpen(false)
@@ -164,7 +147,7 @@ function App() {
                 onClick={() => setDarkMode(!darkMode)}
                 className="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
-                {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                {darkMode ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
               </button>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -198,8 +181,38 @@ function App() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="hero-bg min-h-screen flex items-center justify-center pt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <section id="home" className="hero-bg min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
+        {/* Animated Icons */}
+        <motion.div
+          className="absolute top-1/4 left-1/4 text-primary opacity-20"
+          animate={{ y: [0, 20, 0], x: [0, 10, 0], rotate: [0, 10, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Stethoscope size={80} />
+        </motion.div>
+        <motion.div
+          className="absolute bottom-1/4 right-1/4 text-secondary opacity-20"
+          animate={{ y: [0, -20, 0], x: [0, -10, 0], rotate: [0, -10, 0] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        >
+          <Pill size={80} />
+        </motion.div>
+        <motion.div
+          className="absolute top-1/2 right-1/3 text-accent opacity-20"
+          animate={{ y: [0, 15, 0], x: [0, -15, 0], rotate: [0, 5, 0] }}
+          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        >
+          <Syringe size={80} />
+        </motion.div>
+        <motion.div
+          className="absolute bottom-1/3 left-1/3 text-primary opacity-20"
+          animate={{ y: [0, -10, 0], x: [0, 10, 0], rotate: [0, -5, 0] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+        >
+          <Microscope size={80} />
+        </motion.div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
           <div className="text-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
@@ -435,29 +448,36 @@ function App() {
           </motion.div>
 
           <div className="relative max-w-4xl mx-auto">
-            <motion.div
-              key={currentTestimonial}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Card className="testimonial-card">
-                <CardContent className="p-8 text-center">
-                  <div className="flex justify-center mb-4">
-                    {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 italic">
-                    "{testimonials[currentTestimonial].text}"
-                  </p>
-                  <p className="font-semibold text-gray-900 dark:text-white">
-                    - {testimonials[currentTestimonial].name}
-                  </p>
-                </CardContent>
-              </Card>
-            </motion.div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentTestimonial}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Card className="testimonial-card">
+                  <CardContent className="p-8 text-center">
+                    <img 
+                      src={testimonials[currentTestimonial].image} 
+                      alt={testimonials[currentTestimonial].name} 
+                      className="w-16 h-16 rounded-full mx-auto mb-4 object-cover border-2 border-primary"
+                    />
+                    <div className="flex justify-center mb-4">
+                      {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                    <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 italic">
+                      "{testimonials[currentTestimonial].text}"
+                    </p>
+                    <p className="font-semibold text-gray-900 dark:text-white">
+                      - {testimonials[currentTestimonial].name}
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </AnimatePresence>
 
             <div className="flex justify-center mt-8 space-x-2">
               {testimonials.map((_, index) => (
@@ -500,17 +520,17 @@ function App() {
                       📋 Google Form Integration Ready
                     </h3>
                     <p className="text-blue-600 dark:text-blue-300 text-sm">
-                      Replace the iframe src below with your actual Google Form embed URL
+                      The Google Form below is embedded for your convenience.
                     </p>
                   </div>
                 </div>
 
-                {/* Google Form Embed - Replace with actual Google Form URL */}
-                <div className="relative w-full" style={{ minHeight: '600px' }}>
+                {/* Google Form Embed */}
+                <div className="relative w-full overflow-hidden rounded-lg" style={{ minHeight: '1353px' }}>
                   <iframe
-                    src="https://docs.google.com/forms/d/e/YOUR_GOOGLE_FORM_ID/viewform?embedded=true"
+                    src="https://docs.google.com/forms/d/e/1FAIpQLScESG7lwKMfiKjFeZYuy81RR-f1zlNATPQzz3iWyyuMiu04aw/viewform?embedded=true"
                     width="100%"
-                    height="600"
+                    height="1353"
                     frameBorder="0"
                     marginHeight="0"
                     marginWidth="0"
@@ -519,60 +539,6 @@ function App() {
                   >
                     Loading…
                   </iframe>
-                  
-                  {/* Fallback content when Google Form is not available */}
-                  <div className="absolute inset-0 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                    <div className="text-center p-8">
-                      <Calendar className="w-16 h-16 text-primary mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                        Appointment Booking Form
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md">
-                        To complete the integration, please:
-                      </p>
-                      <div className="text-left bg-white dark:bg-gray-700 rounded-lg p-6 max-w-lg mx-auto">
-                        <ol className="list-decimal list-inside space-y-2 text-sm text-gray-700 dark:text-gray-300">
-                          <li>Create a Google Form with the following fields:</li>
-                          <ul className="ml-6 mt-2 space-y-1 list-disc list-inside text-xs">
-                            <li>Full Name (Required)</li>
-                            <li>Phone Number (Required)</li>
-                            <li>Email Address (Required)</li>
-                            <li>Preferred Date (Required)</li>
-                            <li>Preferred Time (Required)</li>
-                            <li>Symptoms/Reason for Visit (Optional)</li>
-                          </ul>
-                          <li className="mt-3">Get the embed code from Google Forms</li>
-                          <li>Replace the iframe src URL above with your form's embed URL</li>
-                          <li>Remove this placeholder content</li>
-                        </ol>
-                      </div>
-                      <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-                        <Button 
-                          onClick={() => window.open('https://forms.google.com', '_blank')}
-                          className="bg-blue-600 hover:bg-blue-700"
-                        >
-                          Create Google Form
-                        </Button>
-                        <Button 
-                          variant="outline"
-                          onClick={() => window.open('mailto:dr.tohid@clinic.com?subject=Appointment Request', '_blank')}
-                        >
-                          Email Instead
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Instructions for form integration */}
-                <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Integration Instructions:</h4>
-                  <div className="text-sm text-gray-600 dark:text-gray-300 space-y-1">
-                    <p><strong>Step 1:</strong> Create your Google Form at <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">forms.google.com</a></p>
-                    <p><strong>Step 2:</strong> Click "Send" → "Embed HTML" → Copy the iframe code</p>
-                    <p><strong>Step 3:</strong> Replace the iframe src URL in the code above</p>
-                    <p><strong>Step 4:</strong> Remove the placeholder content for a clean integration</p>
-                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -649,8 +615,18 @@ function App() {
           <div className="mt-16">
             <Card>
               <CardContent className="p-0">
-                <div className="bg-gray-200 dark:bg-gray-700 h-64 flex items-center justify-center">
-                  <p className="text-gray-600 dark:text-gray-300">Interactive Map Placeholder</p>
+                <div className="bg-gray-200 dark:bg-gray-700 h-64 flex items-center justify-center overflow-hidden rounded-lg">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.9000000000004!2d91.368463!3d23.0094185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375369001d3c363b%3A0x15539f5a286f5568!2sDD%20Lab!5e0!3m2!1sen!2sbd!4v1700000000000!5m2!1sen!2sbd"
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    aria-hidden="false"
+                    tabIndex="0"
+                    title="Google Map of DD Lab"
+                  ></iframe>
                 </div>
               </CardContent>
             </Card>
@@ -711,4 +687,5 @@ function App() {
 }
 
 export default App
+
 
